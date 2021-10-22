@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   postgres:
-    container_name: postgres_container
+    container_name: postgres_Latest
     image: postgres:latest
     restart: always
     environment:
@@ -13,7 +13,7 @@ services:
         max-size: 10m
         max-file: "3"
     ports:
-      - '5432:5432'
+      - 5432:5432
     volumes:
       - dbdata:/var/lib/postgresql/data
 

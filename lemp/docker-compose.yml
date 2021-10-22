@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  nginx:
+    container_name: nginx_1_21
+    image: nginx:1.21
+    ports:
+      - 80:80
+    volumes:
+      - ./src:/var/www/lemp
+      - ./.docker/nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - php
+
+  php:
+    container_name: php_8_0_fpm
+    build: ./.docker/php
+    working_dir: /var/www/lemp
+    volumes:
+      - ./src:/var/www/lemp
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
+  mariadb:
+    container_name: mariadb_10_6_4
+    image: mariadb:10.6.4
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: database
+    volumes:
+      - ./.docker/mysql/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf
+      - dbdata:/var/lib/mysql
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD
+      interval: 5s
+      retries: 10
+
+volumes:
+  dbdata: 
