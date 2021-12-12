@@ -2,12 +2,13 @@ version: '3.8'
 
 services:
   postgres:
-    container_name: postgres_Latest
+    container_name: postgres_latest
     image: postgres:latest
-    restart: always
+    restart: on-failure
     environment:
-      - POSTGRES_USER=postgresuser
-      - POSTGRES_PASSWORD=postgrespassword
+      - POSTGRES_USER=postgres_user
+      - POSTGRES_PASSWORD=postgres_password
+      - POSTGRES_DB=postgres_db
     logging:
       options:
         max-size: 10m
